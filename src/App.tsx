@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
+import FullInput from "./component/FullInput";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -76,6 +77,13 @@ function App() {
         }
     }
 
+    const addTodolist = (newTitle:string) => {
+        let newID = v1()
+        let newTDL: TodolistType =  {id: newID, title: newTitle, filter: "all"}
+        setTodolists([...todolists, newTDL])
+        setTasks({...tasks, [newID]: []})
+    }
+
     function removeTodolist(id: string) {
         // засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
         setTodolists(todolists.filter(tl => tl.id != id));
@@ -87,16 +95,17 @@ function App() {
 
     return (
         <div className="App">
+            <FullInput callBack={addTodolist}/>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id];
                     let tasksForTodolist = allTodolistTasks;
 
                     if (tl.filter === "active") {
-                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === false);
+                        tasksForTodolist = allTodolistTasks.filter(t => !t.isDone);
                     }
                     if (tl.filter === "completed") {
-                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
+                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone);
                     }
 
                     return <Todolist

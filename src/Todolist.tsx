@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import {FilterValuesType} from './App';
 import FullInput from "./component/FullInput";
+import EditableSpan from "./component/EditableSpan";
 
 export type TaskType = {
     id: string
@@ -27,7 +28,7 @@ export function Todolist(props: PropsType) {
     const addTaskHandler = (newTitle:string) => {
        props.addTask(newTitle, props.id)
     }
-    
+
     const removeTodolist = () => props.removeTodolist(props.id)
 
     const onAllClickHandler = () => props.changeFilter("all", props.id);
@@ -35,7 +36,8 @@ export function Todolist(props: PropsType) {
     const onCompletedClickHandler = () => props.changeFilter("completed", props.id);
 
     return <div>
-        <h3> {props.title}
+        <h3>
+            <EditableSpan title={props.title}/>
             <button onClick={removeTodolist}>x</button>
         </h3>
         <FullInput callBack={addTaskHandler}/>
